@@ -2,6 +2,7 @@ package com.dongwt.redis.test;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -11,9 +12,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @WebAppConfiguration
 public class DemoTest {
     
+    @Value("${redis.pass}")
+    private String pass; 
     
     @Test
     public void testProperties(){
+        System.out.println(pass);
     }
 
 }
