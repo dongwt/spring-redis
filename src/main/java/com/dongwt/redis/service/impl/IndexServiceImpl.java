@@ -33,7 +33,7 @@ public class IndexServiceImpl implements IndexService {
             user.setId(i);
             user.setUserName("tom" + i);
             TopicRequest<User> request = new TopicRequest<User>(projectName, UUID.randomUUID().toString(), user);
-            providerProxy.save(request, new TopicRequestHandle<User>() {
+            providerProxy.lPush(request, new TopicRequestHandle<User>() {
                 @Override
                 public void callBack(TopicResponse<User> response) {
                     System.out.println("request: " + JSONObject.toJSONString(request));

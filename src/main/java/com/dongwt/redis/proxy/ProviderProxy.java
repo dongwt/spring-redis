@@ -82,39 +82,30 @@ public class ProviderProxy<T> extends BaseProxy<T> {
             return;
         }
         isSubscribe = true;
-        System.out.println("开始监听");
-        redisTemplate.execute(new RedisCallback<Boolean>() {
-            byte[] channels = keySerializer.serialize("projectName");
-
-            @Override
-            public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
-                connection.subscribe(new MessageListener() {
-                    @Override
-                    public void onMessage(Message message, byte[] pattern) {
-                        String channel = keySerializer.deserialize(message.getChannel());
-                        TopicResponse<T> response = responseSerializer.deserialize(message.getBody());
-                        //执行回调
-                        topicHandleMap.get(channel + response.getUUID()).callBack(response);
-                    }
-                }, channels);
-                return true;
-            }
-        });
-    }
-
-    public void save(TopicRequest<T> request, TopicRequestHandle<T> handle) {
-        //开启子线程监听回调
         executorService.submit(new Runnable() {
-
             @Override
             public void run() {
-                subscribe();
+
+                redisTemplate.execute(new RedisCallback<Boolean>() {
+                    byte[] channels = keySerializer.serialize("projectName");
+
+                    @Override
+                    public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
+                        connection.subscribe(new MessageListener() {
+                            @Override
+                            public void onMessage(Message message, byte[] pattern) {
+                                String channel = keySerializer.deserialize(message.getChannel());
+                                TopicResponse<T> response = responseSerializer.deserialize(message.getBody());
+                                //执行回调
+                                topicHandleMap.get(channel + response.getUUID()).callBack(response);
+                            }
+                        }, channels);
+                        return true;
+                    }
+                });
             }
         });
 
-        //入队
-        lPush(request, handle);
-
-    };
+    }
 
 }
