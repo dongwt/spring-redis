@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TopicResponse<T> implements Serializable{
+public class TopicResponse<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     private String UUID;
-    
+
     private T body;
 
 }
