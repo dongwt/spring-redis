@@ -11,6 +11,8 @@
     http://www.springframework.org/schema/mvc
     http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
 
+	<context:property-placeholder location="classpath:redis.properties" />
+
 	<mvc:annotation-driven>
 		<mvc:message-converters register-defaults="true">
 			<bean

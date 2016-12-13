@@ -25,11 +25,6 @@ public class ProviderProxy<T> extends BaseProxy<T> {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 是否被订阅
-     */
-    private static volatile boolean isSubscribe = false;
-
     private ExecutorService executorService = Executors.newFixedThreadPool(1);
 
     /**
@@ -50,8 +45,8 @@ public class ProviderProxy<T> extends BaseProxy<T> {
      * @param handle
      */
     public void lPush(TopicRequest<T> request, TopicRequestHandle<T> handle) {
-        String topickey = request.getTopicKey();
-        byte[] queuekey = keySerializer.serialize(request.getQueueKey());
+        String topickey = projectName + request.getUUID();
+        byte[] queuekey = keySerializer.serialize(projectName);
         byte[] value = requestSerializer.serialize(request);
 
         redisTemplate.execute(new RedisCallback<Boolean>() {
@@ -77,17 +72,12 @@ public class ProviderProxy<T> extends BaseProxy<T> {
      *
      */
     public synchronized void subscribe() {
-        //如果被订阅，则直接返回
-        if (isSubscribe) {
-            return;
-        }
-        isSubscribe = true;
         executorService.submit(new Runnable() {
             @Override
             public void run() {
 
                 redisTemplate.execute(new RedisCallback<Boolean>() {
-                    byte[] channels = keySerializer.serialize("projectName");
+                    byte[] channels = keySerializer.serialize(projectName);
 
                     @Override
                     public Boolean doInRedis(RedisConnection connection) throws DataAccessException {

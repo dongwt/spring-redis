@@ -1,30 +1,25 @@
 package com.dongwt.redis.test;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = AppTestConf.class)
+@WebAppConfiguration
 public class DemoTest {
+    
+    @Value("${redis.projectName}")
+    private String projectName;
 
-    public static void main(String[] args) throws ParseException {
-           
-        Date date = new Date();
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTime(date);
-//        calendar.set(Calendar.HOUR_OF_DAY, 0);
-//        calendar.set(Calendar.SECOND,0);
-//        calendar.set(Calendar.MINUTE,0);
-//        
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String dateStr = format.format(date) + " 00:00:00";
-        date = format.parse(dateStr);
-        
-        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        
-        System.out.println(timeFormat.format(date));
-        
-        
-        
-        
+
+    @Test
+    public void test(){
+        System.out.println(projectName);
     }
+        
+        
 }

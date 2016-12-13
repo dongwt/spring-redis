@@ -23,15 +23,16 @@ public class ConsumerProxy<T> extends BaseProxy<T> {
 
     private static final long serialVersionUID = 1L;
     
+    
     private ExecutorService executorService = Executors.newFixedThreadPool(1);
 
     /**
      * 
-     * 功能描述:TODO(描述这个方法的作用)
+     * 功能描述:拉取消息
      *
      * <pre>
      * Modify Reason:(修改原因,不需覆盖，直接追加.)
-     *     Administrator:   2016年12月12日      新建
+     *     董纹陶:   2016年12月12日      新建
      * </pre>
      *
      */
@@ -47,16 +48,15 @@ public class ConsumerProxy<T> extends BaseProxy<T> {
                     public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
                         boolean flag = true;
                         while (flag) {
-                            List<byte[]> values = connection.bLPop(120, keySerializer.serialize("projectName"));
+                            List<byte[]> values = connection.bLPop(120, keySerializer.serialize(projectName));
                             
                             if(null != values){
                                 TopicRequest<T> request = requestSerializer.deserialize(values.get(1));
                                 TopicResponse<T> response = new TopicResponse<T>(request.getUUID(), request.getBody());
-                              
                                 //处理逻辑
                                 handle.callBack(request);
                                 //发布主题
-                                connection.publish(keySerializer.serialize("projectName"), responseSerializer.serialize(response));
+                                connection.publish(keySerializer.serialize(projectName), responseSerializer.serialize(response));
                             }
                         }
                         return true;
@@ -68,5 +68,7 @@ public class ConsumerProxy<T> extends BaseProxy<T> {
         
        
     }
+    
+    
 
 }

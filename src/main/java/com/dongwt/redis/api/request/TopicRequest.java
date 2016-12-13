@@ -13,21 +13,8 @@ public class TopicRequest<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 项目名
-     */
-    private String projectName;
-
     private String UUID;
 
     private T body;
-
-    public String getQueueKey() {
-        return projectName;
-    }
-
-    public String getTopicKey() {
-        return projectName + UUID;
-    }
 
 }

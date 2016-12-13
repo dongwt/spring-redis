@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Component;
@@ -23,10 +24,15 @@ import lombok.NoArgsConstructor;
 public class BaseProxy<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
+    /**
+     * 项目名
+     */
+    @Value("${redis.projectName}")
+    protected String projectName;
 
     @Autowired
     protected RedisTemplate<String, T> redisTemplate;
-
     
     protected RedisSerializer<String>  stringSerializer;
 
