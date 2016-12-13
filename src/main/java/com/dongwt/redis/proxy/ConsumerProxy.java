@@ -38,12 +38,24 @@ public class ConsumerProxy<T> extends BaseProxy<T> {
                 boolean flag = true;
                 while (flag) {
                     List<byte[]> values = connection.bLPop(120, keySerializer.serialize("projectName"));
+                    
+                    if(null == values){
+                        return false;
+                    }
+                    
                     TopicRequest<T> request = requestSerializer.deserialize(values.get(1));
                     TopicResponse<T> response = new TopicResponse<T>(request.getUUID(), request.getBody());
+                    
+                    try {
+                        Thread.sleep(1000*5);
+                    }
+                    catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     //处理逻辑
                     handle.callBack(request);
                     //发布主题
-                    connection.publish(keySerializer.serialize("projectName" + request.getUUID()), responseSerializer.serialize(response));
+                    connection.publish(keySerializer.serialize("projectName"), responseSerializer.serialize(response));
                 }
 
                 return true;

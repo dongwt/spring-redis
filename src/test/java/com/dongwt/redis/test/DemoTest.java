@@ -1,23 +1,21 @@
 package com.dongwt.redis.test;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = AppTestConf.class)
-@WebAppConfiguration
 public class DemoTest {
-    
-    @Value("${redis.pass}")
-    private String pass; 
-    
-    @Test
-    public void testProperties(){
-        System.out.println(pass);
-    }
 
+    public static void main(String[] args) {
+                ExecutorService executorService = Executors.newFixedThreadPool(1);
+                executorService.submit(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        System.out.println(".....");
+                    }
+                });
+                
+                System.out.println("+++");
+
+    }
 }
