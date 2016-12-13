@@ -2,9 +2,11 @@ package com.dongwt.redis.ctrl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dongwt.redis.api.response.Response;
+import com.dongwt.redis.entity.User;
 import com.dongwt.redis.service.IndexService;
 
 @RestController
@@ -16,6 +18,15 @@ public class IndexCtrl {
 
     @RequestMapping("index.action")
     public Response<String> index() {
+        Response<String> response = new Response<String>();
+        response.setMessage("成功");
+        response.setStatus(1);
+        return response;
+    }
+    
+    
+    @RequestMapping(value="user.action",method=RequestMethod.GET)
+    public Response<String> user(User user) {
         Response<String> response = new Response<String>();
         response.setMessage("成功");
         response.setStatus(1);
