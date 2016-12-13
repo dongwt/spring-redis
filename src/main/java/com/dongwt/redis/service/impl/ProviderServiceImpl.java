@@ -10,20 +10,15 @@ import com.dongwt.redis.api.request.TopicRequest;
 import com.dongwt.redis.api.response.TopicResponse;
 import com.dongwt.redis.entity.User;
 import com.dongwt.redis.handle.TopicRequestHandle;
-import com.dongwt.redis.handle.TopicResponseHandle;
-import com.dongwt.redis.proxy.ConsumerProxy;
 import com.dongwt.redis.proxy.ProviderProxy;
-import com.dongwt.redis.service.IndexService;
+import com.dongwt.redis.service.ProviderService;
 
 @Service
-public class IndexServiceImpl implements IndexService {
-
+public class ProviderServiceImpl implements ProviderService {
+    
     @Autowired
     private ProviderProxy<User> providerProxy;
-
-    @Autowired
-    private ConsumerProxy<User> consumerProxy;
-
+    
     private String projectName = "projectName";
 
     @Override
@@ -43,22 +38,4 @@ public class IndexServiceImpl implements IndexService {
         }
     }
 
-    @Override
-    public void pop() {
-        consumerProxy.bLPop(new TopicResponseHandle<User>() {
-
-            @Override
-            public void callBack(TopicRequest<User> request) {
-
-                try {
-                    System.out.println("handel.....");
-                    Thread.sleep(1000 * 5);
-                }
-                catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
-    }
 }

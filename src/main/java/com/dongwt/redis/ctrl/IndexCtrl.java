@@ -7,13 +7,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dongwt.redis.api.response.Response;
 import com.dongwt.redis.entity.User;
+import com.dongwt.redis.service.ConsumerService;
 import com.dongwt.redis.service.IndexService;
+import com.dongwt.redis.service.ProviderService;
 
 @RestController
 public class IndexCtrl {
     
     @Autowired
     private IndexService indexService;
+    
+    @Autowired
+    private ProviderService providerService;
+    
+    @Autowired
+    private ConsumerService consumerService;
 
 
     @RequestMapping("index.action")
@@ -37,7 +45,7 @@ public class IndexCtrl {
     public Response<String> push() {
         Response<String> response = new Response<String>();
         
-        indexService.push();
+        providerService.push();
 
         response.setMessage("成功");
         response.setStatus(1);
@@ -49,7 +57,7 @@ public class IndexCtrl {
     public Response<String> pop() {
         Response<String> response = new Response<String>();
        
-        indexService.pop();
+        consumerService.pop();
         
         response.setMessage("成功");
         response.setStatus(1);

@@ -1,6 +1,8 @@
 package com.dongwt.redis.proxy;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -20,6 +22,8 @@ import lombok.EqualsAndHashCode;
 public class ConsumerProxy<T> extends BaseProxy<T> {
 
     private static final long serialVersionUID = 1L;
+    
+    private ExecutorService executorService = Executors.newFixedThreadPool(1);
 
     /**
      * 
@@ -32,35 +36,37 @@ public class ConsumerProxy<T> extends BaseProxy<T> {
      *
      */
     public void bLPop(TopicResponseHandle<T> handle) {
-        redisTemplate.execute(new RedisCallback<Boolean>() {
+        
+        executorService.submit(new Runnable() {
+            
             @Override
-            public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
-                boolean flag = true;
-                while (flag) {
-                    List<byte[]> values = connection.bLPop(120, keySerializer.serialize("projectName"));
-                    
-                    if(null == values){
-                        return false;
+            public void run() {
+                
+                redisTemplate.execute(new RedisCallback<Boolean>() {
+                    @Override
+                    public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
+                        boolean flag = true;
+                        while (flag) {
+                            List<byte[]> values = connection.bLPop(120, keySerializer.serialize("projectName"));
+                            
+                            if(null != values){
+                                TopicRequest<T> request = requestSerializer.deserialize(values.get(1));
+                                TopicResponse<T> response = new TopicResponse<T>(request.getUUID(), request.getBody());
+                              
+                                //处理逻辑
+                                handle.callBack(request);
+                                //发布主题
+                                connection.publish(keySerializer.serialize("projectName"), responseSerializer.serialize(response));
+                            }
+                        }
+                        return true;
                     }
-                    
-                    TopicRequest<T> request = requestSerializer.deserialize(values.get(1));
-                    TopicResponse<T> response = new TopicResponse<T>(request.getUUID(), request.getBody());
-                    
-                    try {
-                        Thread.sleep(1000*5);
-                    }
-                    catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    //处理逻辑
-                    handle.callBack(request);
-                    //发布主题
-                    connection.publish(keySerializer.serialize("projectName"), responseSerializer.serialize(response));
-                }
-
-                return true;
+                });
+                
             }
         });
+        
+       
     }
 
 }

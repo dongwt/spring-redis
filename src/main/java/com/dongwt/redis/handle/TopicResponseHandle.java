@@ -1,7 +1,5 @@
 package com.dongwt.redis.handle;
 
-import java.io.Serializable;
-
 import com.dongwt.redis.api.request.TopicRequest;
 
 import lombok.Data;
@@ -9,9 +7,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public abstract class TopicResponseHandle<T> implements Serializable {
+public abstract class TopicResponseHandle<T>{
 
-    private static final long serialVersionUID = 1L;
 
     /**
      * 
