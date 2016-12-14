@@ -18,14 +18,14 @@ public class ConsumerListener implements ApplicationListener<ContextRefreshedEve
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        System.out.println("ConsumerListener...");
+        System.out.println("ConsumerListener " + consumerProxy.getProjectName() + " start complete.");
         consumerProxy.bLPop(new TopicResponseHandle() {
 
             @Override
             public void callBack(TopicRequest request) {
 
                 try {
-                    System.out.println("handel.....");
+                    System.out.println("handel business.....");
                     Thread.sleep(1000 * 5);
                 }
                 catch (InterruptedException e) {

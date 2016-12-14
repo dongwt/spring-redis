@@ -15,7 +15,7 @@ public class ProviderListener implements ApplicationListener<ContextRefreshedEve
     
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        System.out.println("ProviderListener..." + providerProxy.getProjectName());
+        System.out.println("ConsumerListener " + providerProxy.getProjectName() + " start complete.");
         providerProxy.subscribe();
     }
 

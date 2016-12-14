@@ -4,14 +4,15 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.fastjson.JSONObject;
 import com.dongwt.redis.api.request.TopicRequest;
 import com.dongwt.redis.api.response.TopicResponse;
+import com.dongwt.redis.callback.TopicRequestCallback;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,6 +25,9 @@ public class ProviderProxy<T> extends BaseProxy<T> {
     private static final long serialVersionUID = 1L;
 
     private ExecutorService executorService = Executors.newFixedThreadPool(1);
+
+    @Autowired(required = false)
+    private TopicRequestCallback<T> callback;
 
     /**
      * 
@@ -78,7 +82,9 @@ public class ProviderProxy<T> extends BaseProxy<T> {
                             if (null != values) {
                                 TopicResponse<T> response = responseSerializer.deserialize(values.get(1));
                                 //执行回调
-                                System.out.println("callBack:" + JSONObject.toJSONString(response));
+                                if (callback != null) {
+                                    callback.onResponseEvent(response);
+                                }
                             }
                         }
                         return true;
