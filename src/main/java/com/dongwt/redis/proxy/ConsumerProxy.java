@@ -56,7 +56,7 @@ public class ConsumerProxy<T> extends BaseProxy<T> {
                                 //处理逻辑
                                 handle.callBack(request);
                                 //发布主题
-                                connection.publish(keySerializer.serialize(projectName), responseSerializer.serialize(response));
+                                connection.lPush(keySerializer.serialize(projectName+"CallBack"), responseSerializer.serialize(response));
                             }
                         }
                         return true;
