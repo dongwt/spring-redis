@@ -7,9 +7,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = AppTestConf.class)
 @WebAppConfiguration
+@Slf4j
 public class DemoTest {
     
     @Value("${redis.projectName}")
@@ -18,7 +21,7 @@ public class DemoTest {
 
     @Test
     public void test(){
-        System.out.println(projectName);
+        log.info("projectName {}",projectName);
     }
         
         

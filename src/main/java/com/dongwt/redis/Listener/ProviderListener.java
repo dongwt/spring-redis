@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 
 import com.dongwt.redis.proxy.ProviderProxy;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class ProviderListener implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -15,7 +18,7 @@ public class ProviderListener implements ApplicationListener<ContextRefreshedEve
     
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        System.out.println("ConsumerListener " + providerProxy.getProjectName() + " start complete.");
+        log.info("ProviderListener {} start complete.",providerProxy.getProjectName());
         providerProxy.subscribe();
     }
 

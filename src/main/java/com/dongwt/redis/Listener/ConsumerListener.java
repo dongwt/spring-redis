@@ -9,6 +9,9 @@ import com.dongwt.redis.api.request.TopicRequest;
 import com.dongwt.redis.handle.TopicResponseHandle;
 import com.dongwt.redis.proxy.ConsumerProxy;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class ConsumerListener implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -18,14 +21,14 @@ public class ConsumerListener implements ApplicationListener<ContextRefreshedEve
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        System.out.println("ConsumerListener " + consumerProxy.getProjectName() + " start complete.");
+        log.info("ConsumerListener {} start complete.",consumerProxy.getProjectName());
         consumerProxy.bLPop(new TopicResponseHandle() {
 
             @Override
             public void callBack(TopicRequest request) {
 
                 try {
-                    System.out.println("handel business.....");
+                    log.info("handel business.....");
                     Thread.sleep(1000 * 5);
                 }
                 catch (InterruptedException e) {

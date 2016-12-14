@@ -12,6 +12,9 @@ import com.dongwt.redis.api.response.Response;
 import com.dongwt.redis.entity.User;
 import com.dongwt.redis.proxy.ProviderProxy;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("redis")
 public class ProviderCtrl {
@@ -25,8 +28,8 @@ public class ProviderCtrl {
     @RequestMapping("push.action")
     public Response<String> push() {
         Response<String> response = new Response<String>();
-
-        System.out.println("push...");
+        
+        log.info("push...");
 
         for (int i = 0; i < 50; i++) {
             User user = new User();
