@@ -17,14 +17,14 @@
 	</context-param>
 
 
-	<context-param>
+	<!-- <context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:spring/spring-redis.xml</param-value>
+		<param-value>classpath:spring/spring-redis.xml,classpath:spring/spring-mybatis.xml</param-value>
 	</context-param>
 
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
+	</listener> -->
 
 
 	<!-- 防止spring内存溢出监听器 -->
