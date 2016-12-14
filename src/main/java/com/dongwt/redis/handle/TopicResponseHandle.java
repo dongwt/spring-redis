@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public abstract class TopicResponseHandle<T>{
+public abstract class TopicResponseHandle{
 
 
     /**
@@ -21,5 +21,5 @@ public abstract class TopicResponseHandle<T>{
      *
      * @param request
      */
-    public abstract void callBack(TopicRequest<T> request);
+    public abstract void callBack(TopicRequest request);
 }

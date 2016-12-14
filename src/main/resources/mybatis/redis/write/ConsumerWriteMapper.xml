@@ -2,4 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dongwt.redis.dao.write.ConsumerWriteMapper">
 
+	<update id="update" parameterType="com.dongwt.redis.entity.QueueParams">
+		update queue_params
+		<set>
+			handleStatus = 1 , responseBody=#{responseBody}
+		</set>
+		<where>
+			and status = 1 and handleStatus = 0
+			and voucherNumber = #{voucherNumber}
+		</where>
+	</update>
+
 </mapper>

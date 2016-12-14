@@ -14,11 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 public class ProviderListener implements ApplicationListener<ContextRefreshedEvent> {
 
     @Autowired
-    private ProviderProxy<?> providerProxy;
-    
+    private ProviderProxy providerProxy;
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        log.info("ProviderListener {} start complete.",providerProxy.getProjectName());
+        log.info("ProviderListener {} start complete.", providerProxy.getProjectName());
         providerProxy.subscribe();
     }
 

@@ -2,7 +2,7 @@ package com.dongwt.redis.callback;
 
 import com.dongwt.redis.api.response.TopicResponse;
 
-public interface TopicRequestCallback<T> {
+public interface TopicRequestCallback {
     
     /**
      * 
@@ -15,6 +15,6 @@ public interface TopicRequestCallback<T> {
      *
      * @param response
      */
-    void onResponseEvent(TopicResponse<T> response);
+    void onResponseEvent(TopicResponse response);
 
 }

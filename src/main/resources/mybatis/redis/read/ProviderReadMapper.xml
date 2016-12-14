@@ -2,8 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dongwt.redis.dao.read.ProviderReadMapper">
 
-
-
-
+	<select id="getHandleList" resultType="com.dongwt.redis.entity.QueueParams">
+		select
+		id,projectName,voucherNumber,origin,requestBody,responseBody,handleStatus,status,createTime,updateTime
+		from queue_params
+		where status = 1 and handleStatus = 1
+	</select>
 
 </mapper>

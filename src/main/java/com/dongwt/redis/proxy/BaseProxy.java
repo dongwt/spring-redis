@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.dongwt.redis.api.request.TopicRequest;
 import com.dongwt.redis.api.response.TopicResponse;
+import com.dongwt.redis.entity.QueueParams;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Component
-public class BaseProxy<T> implements Serializable {
+public class BaseProxy implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -32,23 +33,23 @@ public class BaseProxy<T> implements Serializable {
     protected String projectName;
 
     @Autowired
-    protected RedisTemplate<String, T> redisTemplate;
+    protected RedisTemplate<String, QueueParams> redisTemplate;
     
     protected RedisSerializer<String>  stringSerializer;
 
     protected RedisSerializer<String>  keySerializer;
 
-    protected RedisSerializer<TopicRequest<T>>  requestSerializer;
+    protected RedisSerializer<TopicRequest>  requestSerializer;
 
-    protected RedisSerializer<TopicResponse<T>>  responseSerializer;
+    protected RedisSerializer<TopicResponse>  responseSerializer;
     
     @SuppressWarnings("unchecked")
     @PostConstruct
     public void init(){
         stringSerializer = redisTemplate.getStringSerializer();
         keySerializer = (RedisSerializer<String>) redisTemplate.getKeySerializer();
-        requestSerializer = (RedisSerializer<TopicRequest<T>>) redisTemplate.getValueSerializer();
-        responseSerializer = (RedisSerializer<TopicResponse<T>>) redisTemplate.getValueSerializer();
+        requestSerializer = (RedisSerializer<TopicRequest>) redisTemplate.getValueSerializer();
+        responseSerializer = (RedisSerializer<TopicResponse>) redisTemplate.getValueSerializer();
     }
 
 }

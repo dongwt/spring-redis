@@ -2,6 +2,8 @@ package com.dongwt.redis.api.request;
 
 import java.io.Serializable;
 
+import com.dongwt.redis.entity.QueueParams;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,12 +11,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TopicRequest<T> implements Serializable {
+public class TopicRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private String UUID;
 
-    private T body;
+    private QueueParams body;
 
 }

@@ -3,7 +3,12 @@
 <mapper namespace="com.dongwt.redis.dao.read.ConsumerReadMapper">
 
 
-
+	<select id="getUnHandleList" resultType="com.dongwt.redis.entity.QueueParams">
+		select
+		id,projectName,voucherNumber,origin,requestBody,responseBody,handleStatus,status,createTime,updateTime
+		from queue_params
+		where status = 1 and handleStatus = 0
+	</select>
 
 
 </mapper>

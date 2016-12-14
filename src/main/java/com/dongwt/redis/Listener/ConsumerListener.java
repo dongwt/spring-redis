@@ -16,12 +16,11 @@ import lombok.extern.slf4j.Slf4j;
 public class ConsumerListener implements ApplicationListener<ContextRefreshedEvent> {
 
     @Autowired
-    private ConsumerProxy<?> consumerProxy;
+    private ConsumerProxy consumerProxy;
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        log.info("ConsumerListener {} start complete.",consumerProxy.getProjectName());
+        log.info("ConsumerListener {} start complete.", consumerProxy.getProjectName());
         consumerProxy.bLPop(new TopicResponseHandle() {
 
             @Override

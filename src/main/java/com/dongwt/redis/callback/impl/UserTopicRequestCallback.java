@@ -10,10 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class UserTopicRequestCallback<T> implements TopicRequestCallback<T>{
+public class UserTopicRequestCallback implements TopicRequestCallback{
 
     @Override
-    public void onResponseEvent(TopicResponse<T> response) {
+    public void onResponseEvent(TopicResponse response) {
         log.info("callBack:{}",JSONObject.toJSONString(response));
     }
 

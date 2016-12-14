@@ -4,14 +4,18 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.stereotype.Component;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dongwt.redis.api.request.TopicRequest;
 import com.dongwt.redis.api.response.TopicResponse;
+import com.dongwt.redis.entity.QueueParams;
 import com.dongwt.redis.handle.TopicResponseHandle;
+import com.dongwt.redis.service.ConsumerService;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,9 +23,12 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Component
-public class ConsumerProxy<T> extends BaseProxy<T> {
+public class ConsumerProxy extends BaseProxy {
 
     private static final long serialVersionUID = 1L;
+    
+    @Autowired
+    private ConsumerService consumerService;
     
     
     private ExecutorService executorService = Executors.newFixedThreadPool(1);
@@ -36,7 +43,7 @@ public class ConsumerProxy<T> extends BaseProxy<T> {
      * </pre>
      *
      */
-    public void bLPop(TopicResponseHandle<T> handle) {
+    public void bLPop(TopicResponseHandle handle) {
         
         executorService.submit(new Runnable() {
             
@@ -51,10 +58,16 @@ public class ConsumerProxy<T> extends BaseProxy<T> {
                             List<byte[]> values = connection.bLPop(120, keySerializer.serialize(projectName));
                             
                             if(null != values){
-                                TopicRequest<T> request = requestSerializer.deserialize(values.get(1));
-                                TopicResponse<T> response = new TopicResponse<T>(request.getUUID(), request.getBody());
+                                TopicRequest request = requestSerializer.deserialize(values.get(1));
+                                TopicResponse response = new TopicResponse(request.getUUID(), request.getBody());
                                 //处理逻辑
                                 handle.callBack(request);
+                                
+                                //更新数据库
+                                QueueParams queueParams = request.getBody();
+                                queueParams.setHandleStatus(1);
+                                queueParams.setResponseBody(JSONObject.toJSONString(response));
+                                consumerService.update(queueParams);
                                 //发布主题
                                 connection.lPush(keySerializer.serialize(projectName+"CallBack"), responseSerializer.serialize(response));
                             }

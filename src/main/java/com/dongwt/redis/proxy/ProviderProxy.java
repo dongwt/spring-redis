@@ -20,14 +20,14 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Component
-public class ProviderProxy<T> extends BaseProxy<T> {
+public class ProviderProxy extends BaseProxy {
 
     private static final long serialVersionUID = 1L;
 
     private ExecutorService executorService = Executors.newFixedThreadPool(1);
 
     @Autowired(required = false)
-    private TopicRequestCallback<T> callback;
+    private TopicRequestCallback callback;
 
     /**
      * 
@@ -41,7 +41,7 @@ public class ProviderProxy<T> extends BaseProxy<T> {
      * @param request
      * @param handle
      */
-    public void lPush(TopicRequest<T> request) {
+    public void lPush(TopicRequest request) {
         byte[] queuekey = keySerializer.serialize(projectName);
         byte[] value = requestSerializer.serialize(request);
 
@@ -80,7 +80,7 @@ public class ProviderProxy<T> extends BaseProxy<T> {
                         while (flag) {
                             List<byte[]> values = connection.bLPop(120, channels);
                             if (null != values) {
-                                TopicResponse<T> response = responseSerializer.deserialize(values.get(1));
+                                TopicResponse response = responseSerializer.deserialize(values.get(1));
                                 //执行回调
                                 if (callback != null) {
                                     callback.onResponseEvent(response);
