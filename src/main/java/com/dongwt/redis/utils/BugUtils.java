@@ -2,12 +2,14 @@ package com.dongwt.redis.utils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -16,6 +18,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dongwt.redis.entity.Area;
 
 public class BugUtils {
@@ -84,6 +87,52 @@ public class BugUtils {
         area.setXqName(suffixTitle);
 
         return area;
+
+    }
+    
+    
+    
+    public static  void post(String url, String json) {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        try {
+            // 创建httpget.    
+            HttpPost httpPost = new HttpPost(url);
+            httpPost.addHeader("Content-type","application/json; charset=utf-8");  
+            httpPost.setHeader("Accept", "application/json");  
+            httpPost.setEntity(new StringEntity(json,Charset.forName("UTF-8")));
+            // 执行get请求.    
+            CloseableHttpResponse response = httpclient.execute(httpPost);
+            try {
+                // 获取响应实体    
+                HttpEntity entity = response.getEntity();
+                if (entity != null) {
+                    System.out.println("--------------------------------");
+                    System.out.println(JSONObject.toJSONString(entity));
+                    System.out.println();
+                }
+            }
+            finally {
+                response.close();
+            }
+        }
+        catch (ClientProtocolException e) {
+            e.printStackTrace();
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            // 关闭连接,释放资源    
+            try {
+                httpclient.close();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
     

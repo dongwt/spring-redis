@@ -1,13 +1,39 @@
 package com.dongwt.redis.test;
 
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import java.util.Random;
+import java.util.UUID;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = AppTestConf.class)
-@WebAppConfiguration
+import org.junit.Test;
+
+import com.alibaba.fastjson.JSONObject;
+import com.dongwt.redis.entity.internal.JdWSWSVoucher;
+import com.dongwt.redis.entity.internal.TableHead;
+import com.dongwt.redis.utils.BugUtils;
+
 public class QueueTest {
+
+    
+    @Test
+    public void test(){
+        
+        String url = "http://127.0.0.1:8085/spring-redis/redis/push.action";
+        JdWSWSVoucher jdWSWSVoucher;
+        Random ra =new Random();
+        
+        
+        for(int i=0; i<100; i++){
+            jdWSWSVoucher = new JdWSWSVoucher();
+            jdWSWSVoucher.setOrigin(ra.nextInt(3) + 1);
+            jdWSWSVoucher.setUuid(UUID.randomUUID().toString());
+            
+            TableHead tableHead = new TableHead();
+            tableHead.setVoucherNumber("V" + UUID.randomUUID().toString());
+            jdWSWSVoucher.setTableHead(tableHead);
+            String json = JSONObject.toJSONString(jdWSWSVoucher);
+            BugUtils.post(url, json);
+        }
+       
+        
+    }
 
 }
