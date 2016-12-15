@@ -5,10 +5,12 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dongwt.redis.api.request.TopicRequest;
+import com.dongwt.redis.api.response.Response;
 import com.dongwt.redis.dao.read.ProviderReadMapper;
 import com.dongwt.redis.dao.write.ProviderWriteMapper;
 import com.dongwt.redis.entity.QueueParams;
@@ -16,6 +18,9 @@ import com.dongwt.redis.entity.internal.JdWSWSVoucher;
 import com.dongwt.redis.proxy.ProviderProxy;
 import com.dongwt.redis.service.ProviderService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class ProviderServiceImpl implements ProviderService {
 
@@ -65,18 +70,31 @@ public class ProviderServiceImpl implements ProviderService {
     }
 
     @Override
-    public void lPush(JdWSWSVoucher jdWSWSVoucher) {
+    public Response<String> lPush(JdWSWSVoucher jdWSWSVoucher) {
+        
+        Response<String> response = new Response<String>();
 
         //参数转换
         QueueParams queueParams = transformParams(jdWSWSVoucher);
 
         //保存
-        save(queueParams);
+        try{
+            save(queueParams);
+        }catch (DuplicateKeyException e) {
+            log.error("插入 重复的voucherNumber {}",e);
+            response.setMessage("插入 重复的voucherNumber");
+            response.setStatus(0);
+            return response;
+        }
 
         //入队
         TopicRequest request = new TopicRequest(UUID.randomUUID().toString(), queueParams);
         providerProxy.lPush(request);
-
+        
+        response.setMessage("成功");
+        response.setStatus(1);
+        
+        return response;
     }
 
 }

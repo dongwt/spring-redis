@@ -2,6 +2,7 @@ package com.dongwt.redis.service;
 
 import java.util.List;
 
+import com.dongwt.redis.api.response.Response;
 import com.dongwt.redis.entity.QueueParams;
 import com.dongwt.redis.entity.internal.JdWSWSVoucher;
 
@@ -44,6 +45,6 @@ public interface ProviderService {
      *
      * @param jdWSWSVoucher
      */
-    void lPush(JdWSWSVoucher jdWSWSVoucher);
+    Response<String> lPush(JdWSWSVoucher jdWSWSVoucher);
 
 }

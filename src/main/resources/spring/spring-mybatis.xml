@@ -64,7 +64,11 @@
 	<bean id="redisWriteSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSourceRedisWrite" />
 		<property name="configLocation" value="classpath:mybatis/sqlmap-config.xml" />
-		<property name="mapperLocations" value="classpath:mybatis/redis/write/**/*.xml" />
+		<property name="mapperLocations">
+			<array>
+				<value>classpath*:mybatis/redis/write/**/*.xml</value>
+			</array>
+		</property>
 	</bean>
 
 	<bean id="redisWriteMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
@@ -75,7 +79,11 @@
 	<bean id="redisReadSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSourceRedisReadOnly" />
 		<property name="configLocation" value="classpath:mybatis/sqlmap-config.xml" />
-		<property name="mapperLocations" value="classpath:mybatis/redis/read/**/*.xml" />
+		<property name="mapperLocations">
+			<array>
+				<value>classpath*:mybatis/redis/read/**/*.xml</value>
+			</array>
+		</property>
 	</bean>
 
 	<bean id="redisReadMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">

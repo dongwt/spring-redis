@@ -3,6 +3,7 @@ package com.dongwt.redis.ctrl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dongwt.redis.api.response.Response;
@@ -19,15 +20,10 @@ public class ProviderCtrl {
     @Autowired
     private ProviderService providerService;
 
-    @RequestMapping("push.action")
+    @RequestMapping(value="push.action",method=RequestMethod.POST)
     public Response<String> push(@RequestBody JdWSWSVoucher jdWSWSVoucher) {
-        Response<String> response = new Response<String>();
-
         log.info("push...");
-        providerService.lPush(jdWSWSVoucher);
-
-        response.setMessage("成功");
-        response.setStatus(1);
+        Response<String> response  = providerService.lPush(jdWSWSVoucher);
         return response;
     }
 
