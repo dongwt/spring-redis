@@ -164,6 +164,9 @@
 				<includes>
 					<include>*.*</include>
 					<include>spring/*</include>
+					<include>mybatis/*</include>
+					<include>mybatis/*/*</include>
+					<include>mybatis/*/*/*</include>
 				</includes>
 			</resource>
 			<resource>

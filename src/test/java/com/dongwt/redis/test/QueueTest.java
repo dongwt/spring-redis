@@ -16,12 +16,12 @@ public class QueueTest {
     @Test
     public void test(){
         
-        String url = "http://127.0.0.1:8085/spring-redis/redis/push.action";
+        String url = "http://192.168.188.129:8080/spring-redis/redis/push.action";
         JdWSWSVoucher jdWSWSVoucher;
         Random ra =new Random();
         
         
-        for(int i=0; i<100; i++){
+        for(int i=0; i<5; i++){
             jdWSWSVoucher = new JdWSWSVoucher();
             jdWSWSVoucher.setOrigin(ra.nextInt(3) + 1);
             jdWSWSVoucher.setUuid(UUID.randomUUID().toString());
